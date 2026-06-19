@@ -4,57 +4,51 @@ import {
   DEMO_COMMUNITIES,
   DEMO_POSTS,
   DEMO_POSTS_FALLBACK,
+  DEMO_NEWS,
+  DEMO_NEWS_FALLBACK,
   isSupabaseConfigured,
-  avatarTint,
   type DemoCommunity,
   type DemoPost,
 } from "@/lib/demo-data";
 import { createClient } from "@/lib/supabase/server";
-import { ChevronLeftIcon, UsersIcon, MessageIcon } from "@/components/icons";
+import { ChevronLeftIcon, UsersIcon, BuildingIcon } from "@/components/icons";
 import { JoinButton } from "@/components/JoinButton";
+import { CommunityTabs } from "./CommunityTabs";
 
-async function getCommunity(
-  slug: string
-): Promise<{ community: DemoCommunity; posts: DemoPost[]; live: boolean } | null> {
+async function getCommunity(slug: string): Promise<{
+  community: DemoCommunity;
+  news: DemoPost[];
+  wall: DemoPost[];
+} | null> {
+  // (Modo demo — cuando se conecte Supabase, leer posts/news reales.)
+  const community = DEMO_COMMUNITIES.find((c) => c.slug === slug);
+  if (community) {
+    return {
+      community,
+      news: DEMO_NEWS[slug] ?? DEMO_NEWS_FALLBACK,
+      wall: DEMO_POSTS[slug] ?? DEMO_POSTS_FALLBACK,
+    };
+  }
   if (isSupabaseConfigured()) {
     try {
       const supabase = await createClient();
-      const { data: community } = await supabase
+      const { data } = await supabase
         .from("communities")
-        .select("slug, name, description, category, kind, color, tags, location")
+        .select("slug, name, description, category, kind, color, tags, location, mutualFriends:mutual_friends, tiers")
         .eq("slug", slug)
         .single();
-      if (community) {
-        const { data: posts } = await supabase
-          .from("posts")
-          .select("id, body, created_at, profiles(display_name)")
-          .order("created_at", { ascending: false });
-        const mapped: DemoPost[] = (posts ?? []).map(
-          (p: {
-            id: string;
-            body: string;
-            profiles?: { display_name?: string } | null;
-          }) => ({
-            id: p.id,
-            body: p.body,
-            author: p.profiles?.display_name ?? "Un miembro",
-            ago: "",
-          })
-        );
-        return { community: community as DemoCommunity, posts: mapped, live: true };
+      if (data) {
+        return {
+          community: data as DemoCommunity,
+          news: DEMO_NEWS_FALLBACK,
+          wall: DEMO_POSTS_FALLBACK,
+        };
       }
     } catch {
-      // continúa a demo
+      // continúa
     }
   }
-
-  const community = DEMO_COMMUNITIES.find((c) => c.slug === slug);
-  if (!community) return null;
-  return {
-    community,
-    posts: DEMO_POSTS[slug] ?? DEMO_POSTS_FALLBACK,
-    live: false,
-  };
+  return null;
 }
 
 export default async function CommunityPage({
@@ -65,7 +59,7 @@ export default async function CommunityPage({
   const { slug } = await params;
   const result = await getCommunity(slug);
   if (!result) notFound();
-  const { community, posts } = result;
+  const { community, news, wall } = result;
   const color = community.color;
   const isInstitution = community.kind !== "grupo";
 
@@ -86,7 +80,6 @@ export default async function CommunityPage({
       </div>
 
       <div className="px-4">
-        {/* Avatar montado sobre la portada */}
         <span
           className={`-mt-9 flex items-center justify-center border-4 border-[var(--surface)] text-2xl font-bold text-white ${
             isInstitution ? "rounded-2xl" : "rounded-3xl"
@@ -98,7 +91,7 @@ export default async function CommunityPage({
         </span>
 
         <h1 className="mt-3 font-display text-xl font-bold">{community.name}</h1>
-        <div className="mt-1 flex items-center gap-2 text-xs text-[var(--muted)]">
+        <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-[var(--muted)]">
           <span
             className="rounded-full px-2 py-0.5 font-semibold"
             style={{ background: `${color}1a`, color }}
@@ -106,10 +99,22 @@ export default async function CommunityPage({
             {community.category}
           </span>
           <span className="flex items-center gap-1">
-            <UsersIcon className="h-3.5 w-3.5" />
+            {isInstitution ? (
+              <BuildingIcon className="h-3.5 w-3.5" />
+            ) : (
+              <UsersIcon className="h-3.5 w-3.5" />
+            )}
             {community.location}
           </span>
         </div>
+
+        {/* Amigos mutuos — solo el número, NO quiénes (para dar curiosidad) */}
+        {community.mutualFriends > 0 && (
+          <div className="mt-3 flex items-center gap-2 rounded-xl bg-[var(--primary-soft)] px-3 py-2 text-sm font-semibold text-[var(--primary-hover)]">
+            <UsersIcon className="h-4 w-4" />
+            {community.mutualFriends} de tus amigos ya están aquí
+          </div>
+        )}
 
         <p className="mt-3 leading-relaxed text-[var(--foreground)]">
           {community.description}
@@ -128,34 +133,36 @@ export default async function CommunityPage({
         </div>
 
         <JoinButton communityName={community.name} />
+
+        {/* Niveles (tiers) dentro de la comunidad */}
+        <div className="mt-6">
+          <h2 className="text-sm font-bold text-[var(--muted)]">NIVELES</h2>
+          <ul className="mt-2 space-y-2">
+            {community.tiers.map((tier, i) => (
+              <li
+                key={tier.name}
+                className="flex items-center gap-3 rounded-xl border border-[var(--border)] px-3 py-2"
+              >
+                <span
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
+                  style={{ background: color, opacity: 0.5 + i * 0.25 }}
+                >
+                  {i + 1}
+                </span>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold">{tier.name}</p>
+                  <p className="truncate text-xs text-[var(--muted)]">
+                    {tier.desc}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
-      {/* Conversación */}
-      <div className="mt-6 border-t border-[var(--border)]">
-        <h2 className="flex items-center gap-2 px-4 pt-4 text-sm font-bold text-[var(--muted)]">
-          <MessageIcon className="h-4 w-4" /> CONVERSACIÓN
-        </h2>
-        <ul>
-          {posts.map((p) => (
-            <li key={p.id} className="border-b border-[var(--border)] px-4 py-4">
-              <div className="flex items-center gap-2.5">
-                <span
-                  className="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white"
-                  style={{ background: avatarTint(p.author) }}
-                  aria-hidden
-                >
-                  {p.author.charAt(0).toUpperCase()}
-                </span>
-                <span className="text-sm font-semibold">{p.author}</span>
-                {p.ago && (
-                  <span className="text-xs text-[var(--muted)]">· {p.ago}</span>
-                )}
-              </div>
-              <p className="mt-2 pl-[2.9rem] text-sm leading-relaxed">{p.body}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {/* Secciones: Noticias (solo admin) y Muro (todos) */}
+      <CommunityTabs news={news} wall={wall} color={color} />
     </div>
   );
 }

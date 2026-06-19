@@ -2,7 +2,9 @@
 // Une a janijim (jóvenes) con tnuot (movimientos juveniles), escuelas y grupos.
 // Sin contadores de seguidores ni likes: pertenencia, no popularidad.
 
-export type CommunityKind = "tnua" | "escuela" | "grupo";
+export type CommunityKind = "tnua" | "escuela" | "institucion" | "grupo";
+
+export type Tier = { name: string; desc: string };
 
 export type DemoCommunity = {
   slug: string;
@@ -14,6 +16,10 @@ export type DemoCommunity = {
   color: string;
   tags: string[];
   location: string;
+  // Cuántos de tus amigos están aquí (sin revelar quiénes — da curiosidad).
+  mutualFriends: number;
+  // Niveles/roles dentro de la comunidad.
+  tiers: Tier[];
 };
 
 export type DemoPost = {
@@ -22,6 +28,27 @@ export type DemoPost = {
   body: string;
   ago: string;
 };
+
+// Niveles típicos por tipo de comunidad.
+const TIERS_TNUA: Tier[] = [
+  { name: "Janijim", desc: "Los más jóvenes, en sus kvutzot" },
+  { name: "Madrijim", desc: "Guían y arman las peulot" },
+  { name: "Rosh / Hanhagá", desc: "Coordinan la tnuá" },
+];
+const TIERS_ESCUELA: Tier[] = [
+  { name: "Alumnos", desc: "Toda la generación" },
+  { name: "Sociedad de alumnos", desc: "Representan a su grado" },
+  { name: "Comités", desc: "Eventos, jésed, cultura" },
+];
+const TIERS_INST: Tier[] = [
+  { name: "Miembros", desc: "Parte de la kehilá" },
+  { name: "Voluntarios", desc: "Apoyan los programas" },
+  { name: "Coordinadores", desc: "Dirigen las actividades" },
+];
+const TIERS_GRUPO: Tier[] = [
+  { name: "Miembros", desc: "Cualquiera de la comunidad" },
+  { name: "Organizadores", desc: "Crean y moderan" },
+];
 
 export const DEMO_COMMUNITIES: DemoCommunity[] = [
   // ---- Tnuot (movimientos juveniles) ----
@@ -35,6 +62,21 @@ export const DEMO_COMMUNITIES: DemoCommunity[] = [
     color: "#1d4ed8",
     tags: ["sionismo", "kvutzá", "majané"],
     location: "Ciudad de México",
+    mutualFriends: 5,
+    tiers: TIERS_TNUA,
+  },
+  {
+    slug: "dor-jadash",
+    name: "Dor Jadash",
+    description:
+      "Una nueva generación. Movimiento juvenil con peulot, majané y mucha ruaj — construyendo comunidad desde lo joven.",
+    category: "Movimiento juvenil",
+    kind: "tnua",
+    color: "#7a1f3d",
+    tags: ["dor-jadash", "ruaj", "majané"],
+    location: "Ciudad de México",
+    mutualFriends: 4,
+    tiers: TIERS_TNUA,
   },
   {
     slug: "bnei-akiva",
@@ -46,6 +88,8 @@ export const DEMO_COMMUNITIES: DemoCommunity[] = [
     color: "#15803d",
     tags: ["religioso", "torá-veavodá", "sionismo"],
     location: "Ciudad de México",
+    mutualFriends: 3,
+    tiers: TIERS_TNUA,
   },
   {
     slug: "hashomer-hatzair",
@@ -57,6 +101,8 @@ export const DEMO_COMMUNITIES: DemoCommunity[] = [
     color: "#dc2626",
     tags: ["igualdad", "jalutziut", "debate"],
     location: "Ciudad de México",
+    mutualFriends: 2,
+    tiers: TIERS_TNUA,
   },
   {
     slug: "macabi-hatzair",
@@ -68,6 +114,8 @@ export const DEMO_COMMUNITIES: DemoCommunity[] = [
     color: "#0ea5e9",
     tags: ["deporte", "macabiá", "ruaj"],
     location: "Ciudad de México",
+    mutualFriends: 6,
+    tiers: TIERS_TNUA,
   },
   {
     slug: "netzer",
@@ -79,6 +127,8 @@ export const DEMO_COMMUNITIES: DemoCommunity[] = [
     color: "#7c3aed",
     tags: ["reformista", "tikún-olam", "inclusión"],
     location: "Ciudad de México",
+    mutualFriends: 1,
+    tiers: TIERS_TNUA,
   },
 
   // ---- Escuelas (colegios) ----
@@ -92,6 +142,8 @@ export const DEMO_COMMUNITIES: DemoCommunity[] = [
     color: "#0891b2",
     tags: ["colegio", "jaguim", "generación"],
     location: "Tecamachalco",
+    mutualFriends: 8,
+    tiers: TIERS_ESCUELA,
   },
   {
     slug: "monte-sinai",
@@ -103,6 +155,8 @@ export const DEMO_COMMUNITIES: DemoCommunity[] = [
     color: "#b45309",
     tags: ["colegio", "jésed", "robótica"],
     location: "Bosques de las Lomas",
+    mutualFriends: 4,
+    tiers: TIERS_ESCUELA,
   },
   {
     slug: "yavne",
@@ -114,6 +168,101 @@ export const DEMO_COMMUNITIES: DemoCommunity[] = [
     color: "#4338ca",
     tags: ["colegio", "sociedad-de-alumnos", "eventos"],
     location: "Tecamachalco",
+    mutualFriends: 5,
+    tiers: TIERS_ESCUELA,
+  },
+  {
+    slug: "maguen-david",
+    name: "Colegio Hebreo Maguen David",
+    description:
+      "Comunidad escolar sefaradí: deporte, jésed, tradición y los grupos de cada generación.",
+    category: "Escuela",
+    kind: "escuela",
+    color: "#0369a1",
+    tags: ["colegio", "sefaradí", "tradición"],
+    location: "Bosques de las Lomas",
+    mutualFriends: 7,
+    tiers: TIERS_ESCUELA,
+  },
+  {
+    slug: "colegio-atid",
+    name: "Colegio Atid",
+    description:
+      "Escuela con espíritu de futuro: proyectos, deporte y vida comunitaria para cada generación.",
+    category: "Escuela",
+    kind: "escuela",
+    color: "#c2410c",
+    tags: ["colegio", "futuro", "proyectos"],
+    location: "Ciudad de México",
+    mutualFriends: 2,
+    tiers: TIERS_ESCUELA,
+  },
+  {
+    slug: "colegio-sefaradi",
+    name: "Colegio Hebreo Sefaradí",
+    description:
+      "Tradición sefaradí, comunidad y actividades para alumnos de todas las edades.",
+    category: "Escuela",
+    kind: "escuela",
+    color: "#047857",
+    tags: ["colegio", "sefaradí", "comunidad"],
+    location: "Polanco",
+    mutualFriends: 3,
+    tiers: TIERS_ESCUELA,
+  },
+
+  // ---- Instituciones (kehilot y organizaciones) ----
+  {
+    slug: "cdi",
+    name: "Centro Deportivo Israelita (CDI)",
+    description:
+      "El corazón deportivo y social de la comunidad: equipos, albercas, eventos y la Macabiá.",
+    category: "Institución",
+    kind: "institucion",
+    color: "#0284c7",
+    tags: ["deporte", "social", "macabiá"],
+    location: "Cuajimalpa",
+    mutualFriends: 9,
+    tiers: TIERS_INST,
+  },
+  {
+    slug: "comunidad-maguen-david",
+    name: "Comunidad Maguen David",
+    description:
+      "Kehilá sefaradí: programas para jóvenes, jésed, festividades y vida comunitaria.",
+    category: "Institución",
+    kind: "institucion",
+    color: "#1e3a8a",
+    tags: ["kehilá", "sefaradí", "jésed"],
+    location: "Bosques de las Lomas",
+    mutualFriends: 6,
+    tiers: TIERS_INST,
+  },
+  {
+    slug: "bet-el",
+    name: "Comunidad Bet El",
+    description:
+      "Kehilá conservadora: tfilá, juventud, programas educativos y proyectos comunitarios.",
+    category: "Institución",
+    kind: "institucion",
+    color: "#6d28d9",
+    tags: ["kehilá", "juventud", "educación"],
+    location: "Tecamachalco",
+    mutualFriends: 3,
+    tiers: TIERS_INST,
+  },
+  {
+    slug: "tribuna-israelita",
+    name: "Tribuna Israelita",
+    description:
+      "Organización de la comunidad: diálogo, liderazgo joven y voz de los judíos de México.",
+    category: "Institución",
+    kind: "institucion",
+    color: "#9f1239",
+    tags: ["liderazgo", "diálogo", "comunidad"],
+    location: "Ciudad de México",
+    mutualFriends: 1,
+    tiers: TIERS_INST,
   },
 
   // ---- Grupos (creados por la comunidad) ----
@@ -127,6 +276,8 @@ export const DEMO_COMMUNITIES: DemoCommunity[] = [
     color: "#059669",
     tags: ["jésed", "voluntariado", "comunidad"],
     location: "Ciudad de México",
+    mutualFriends: 4,
+    tiers: TIERS_GRUPO,
   },
   {
     slug: "madrijim-2026",
@@ -138,6 +289,8 @@ export const DEMO_COMMUNITIES: DemoCommunity[] = [
     color: "#ea580c",
     tags: ["madrijim", "liderazgo", "peulot"],
     location: "Ciudad de México",
+    mutualFriends: 7,
+    tiers: TIERS_GRUPO,
   },
   {
     slug: "mishjakim",
@@ -149,6 +302,8 @@ export const DEMO_COMMUNITIES: DemoCommunity[] = [
     color: "#9333ea",
     tags: ["juegos", "social", "tranqui"],
     location: "Polanco",
+    mutualFriends: 2,
+    tiers: TIERS_GRUPO,
   },
   {
     slug: "majane-verano",
@@ -160,6 +315,8 @@ export const DEMO_COMMUNITIES: DemoCommunity[] = [
     color: "#0d9488",
     tags: ["majané", "verano", "kvutzá"],
     location: "Cuernavaca",
+    mutualFriends: 5,
+    tiers: TIERS_GRUPO,
   },
 ];
 
@@ -185,6 +342,34 @@ export const DEMO_POSTS_FALLBACK: DemoPost[] = [
     id: "f1",
     author: "Un madrij",
     body: "¡Bienvenid@! Preséntate cuando quieras, sin prisa. Qué bueno que estás aquí.",
+    ago: "ahora",
+  },
+];
+
+// NOTICIAS — sección donde SOLO publica el admin/hanhagá (anuncios oficiales).
+// El Muro (DEMO_POSTS) es donde escribe todo el mundo.
+export const DEMO_NEWS: Record<string, DemoPost[]> = {
+  "hanoar-hatzioni": [
+    {
+      id: "n1",
+      author: "Hanhagá Hanóar",
+      body: "📢 Inscripciones al Majané de Verano abiertas hasta el 15. Cupo limitado por kvutzá.",
+      ago: "hace 3h",
+    },
+    {
+      id: "n2",
+      author: "Hanhagá Hanóar",
+      body: "Este Shabat: peulá de Yom Haatzmaut a las 16:00 en el snif. Asistencia para todos los janijim.",
+      ago: "hace 1d",
+    },
+  ],
+};
+
+export const DEMO_NEWS_FALLBACK: DemoPost[] = [
+  {
+    id: "nf1",
+    author: "Hanhagá",
+    body: "Aquí el equipo publica los anuncios oficiales de la comunidad. ¡Mantente al tanto!",
     ago: "ahora",
   },
 ];
@@ -239,13 +424,32 @@ export const DEMO_FEED: FeedItem[] = [
   },
 ];
 
-// Tus comunidades — fila de \"historias\" arriba del feed.
+// Tus comunidades — fila de "historias" arriba del feed.
 export const DEMO_MY_COMMUNITIES = [
   { name: "Hanóar", slug: "hanoar-hatzioni", color: "#1d4ed8" },
   { name: "Tarbut", slug: "tarbut", color: "#0891b2" },
   { name: "Madrijim", slug: "madrijim-2026", color: "#ea580c" },
   { name: "Tikún Olam", slug: "voluntariado-tikun-olam", color: "#059669" },
   { name: "Majané", slug: "majane-verano", color: "#0d9488" },
+];
+
+// "Mis grupos" — comunidades a las que perteneces, con tu nivel (tier) y rol.
+export type MyMembership = {
+  slug: string;
+  name: string;
+  color: string;
+  kind: CommunityKind;
+  myTier: string; // tu nivel dentro de la comunidad
+  isAdmin: boolean;
+};
+
+export const DEMO_MY_GROUPS: MyMembership[] = [
+  { slug: "hanoar-hatzioni", name: "Hanóar Hatzioní", color: "#1d4ed8", kind: "tnua", myTier: "Madrij", isAdmin: false },
+  { slug: "madrijim-2026", name: "Madrijim 2026", color: "#ea580c", kind: "grupo", myTier: "Organizador", isAdmin: true },
+  { slug: "tarbut", name: "Colegio Hebreo Tarbut", color: "#0891b2", kind: "escuela", myTier: "Sociedad de alumnos", isAdmin: false },
+  { slug: "voluntariado-tikun-olam", name: "Voluntariado Tikún Olam", color: "#059669", kind: "grupo", myTier: "Miembro", isAdmin: false },
+  { slug: "majane-verano", name: "Majané de Verano", color: "#0d9488", kind: "grupo", myTier: "Miembro", isAdmin: false },
+  { slug: "cdi", name: "Centro Deportivo Israelita (CDI)", color: "#0284c7", kind: "institucion", myTier: "Miembro", isAdmin: false },
 ];
 
 // Personas — para la pestaña de amigos (janijim y madrijim).

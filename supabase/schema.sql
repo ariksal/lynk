@@ -31,8 +31,14 @@ create table if not exists communities (
   description   text,
   -- e.g. 'hobby', 'volunteering', 'support', 'local', 'identity'
   category      text not null default 'hobby',
-  -- 'group' = informal community; 'institution' = formal org / civic body
-  kind          text not null default 'group',
+  -- tipo: 'tnua' | 'escuela' | 'institucion' | 'grupo'
+  kind          text not null default 'grupo',
+  -- color del movimiento/institución (hex) para teñir la interfaz
+  color         text not null default '#2563eb',
+  -- cuántos amigos del usuario están aquí (se calcula; aquí como caché)
+  mutual_friends int not null default 0,
+  -- niveles/roles dentro de la comunidad: [{name, desc}, …]
+  tiers         jsonb not null default '[]',
   tags          text[] default '{}',
   location      text,
   cover_url     text,

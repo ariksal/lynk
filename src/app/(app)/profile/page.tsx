@@ -2,7 +2,7 @@ import Link from "next/link";
 import { isSupabaseConfigured, avatarTint } from "@/lib/demo-data";
 import { createClient } from "@/lib/supabase/server";
 import { signout } from "@/app/auth/actions";
-import { ShieldIcon } from "@/components/icons";
+import { ShieldIcon, PaletteIcon } from "@/components/icons";
 
 type Profile = {
   username: string;
@@ -113,7 +113,17 @@ export default async function ProfilePage() {
         <ChipList label="Intereses" items={p.interests} />
         <ChipList label="Valores" items={p.values} />
 
-        <div className="mt-8 border-t border-[var(--border)] pt-4">
+        <Link
+          href="/personalizar"
+          className="press mt-6 flex items-center justify-center gap-2 rounded-2xl py-3 font-semibold text-white"
+          style={{
+            background: "linear-gradient(120deg, var(--primary), var(--accent))",
+          }}
+        >
+          <PaletteIcon className="h-5 w-5" /> Personaliza tu página
+        </Link>
+
+        <div className="mt-6 border-t border-[var(--border)] pt-4">
           <Link
             href="/safety"
             className="flex items-center gap-2 text-sm font-medium text-[var(--primary)] hover:underline"

@@ -1,21 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Fredoka, Nunito } from "next/font/google";
+import { Fredoka, Nunito, Baloo_2, Poppins, Quicksand } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/Toast";
+import { ThemeApplier } from "@/components/ThemeApplier";
 
-// Display (títulos) — Fredoka: redonda, amistosa, juvenil.
-const fredoka = Fredoka({
-  variable: "--font-fredoka",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-});
-
-// Cuerpo / UI — Nunito: cálida y muy legible.
-const nunito = Nunito({
-  variable: "--font-nunito",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-});
+// Familias disponibles para personalizar tu página (display + cuerpo).
+const fredoka = Fredoka({ variable: "--font-fredoka", subsets: ["latin"], weight: ["500", "600", "700"] });
+const baloo = Baloo_2({ variable: "--font-baloo", subsets: ["latin"], weight: ["500", "600", "700"] });
+const poppins = Poppins({ variable: "--font-poppins", subsets: ["latin"], weight: ["500", "600", "700"] });
+const nunito = Nunito({ variable: "--font-nunito", subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
+const quicksand = Quicksand({ variable: "--font-quicksand", subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
 export const metadata: Metadata = {
   title: "LYNK — encuentra dónde perteneces",
@@ -44,10 +38,11 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${fredoka.variable} ${nunito.variable} h-full antialiased`}
+      className={`${fredoka.variable} ${baloo.variable} ${poppins.variable} ${nunito.variable} ${quicksand.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
+        <ThemeApplier />
         <ToastProvider>{children}</ToastProvider>
       </body>
     </html>

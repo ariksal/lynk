@@ -153,6 +153,28 @@ export function ShieldIcon({ className }: IconProps) {
   );
 }
 
+export function PaletteIcon({ className }: IconProps) {
+  return (
+    <svg {...base(className)}>
+      <path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.8-1.9 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.1 0-1 .8-1.8 1.8-1.8H16a5 5 0 0 0 5-5c0-3.9-4-7-9-7Z" />
+      <circle cx="7.5" cy="10.5" r="1" fill="currentColor" />
+      <circle cx="12" cy="7.5" r="1" fill="currentColor" />
+      <circle cx="16.5" cy="10.5" r="1" fill="currentColor" />
+    </svg>
+  );
+}
+
+export function GroupsIcon({ className, filled }: IconProps) {
+  return (
+    <svg {...base(className)} fill={filled ? "currentColor" : "none"}>
+      <rect x="3.5" y="3.5" width="7" height="7" rx="2" />
+      <rect x="13.5" y="3.5" width="7" height="7" rx="2" />
+      <rect x="3.5" y="13.5" width="7" height="7" rx="2" />
+      <rect x="13.5" y="13.5" width="7" height="7" rx="2" />
+    </svg>
+  );
+}
+
 export function MoreIcon({ className }: IconProps) {
   return (
     <svg {...base(className)} fill="currentColor" stroke="none">

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   HomeIcon,
   CompassIcon,
+  GroupsIcon,
   UsersIcon,
   UserIcon,
 } from "@/components/icons";
@@ -12,6 +13,7 @@ import {
 const TABS = [
   { href: "/feed", label: "Inicio", Icon: HomeIcon },
   { href: "/discover", label: "Explorar", Icon: CompassIcon },
+  { href: "/my-groups", label: "Mis grupos", Icon: GroupsIcon },
   { href: "/friends", label: "Amigos", Icon: UsersIcon },
   { href: "/profile", label: "Perfil", Icon: UserIcon },
 ];
@@ -38,7 +40,9 @@ export function BottomNav() {
                 }`}
               >
                 <Icon className="h-6 w-6" filled={active} />
-                <span className="text-[0.62rem] font-medium">{label}</span>
+                <span className="whitespace-nowrap text-[0.6rem] font-medium">
+                  {label}
+                </span>
               </Link>
             </li>
           );

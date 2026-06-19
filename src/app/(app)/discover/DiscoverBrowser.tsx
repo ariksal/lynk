@@ -1,103 +1,152 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
-import { categoryLabel } from "@/lib/categories";
-import { avatarTint, type DemoCommunity } from "@/lib/demo-data";
+import type { DemoCommunity, CommunityKind } from "@/lib/demo-data";
 import { SearchIcon, UsersIcon, BuildingIcon } from "@/components/icons";
+
+const TABS: { key: string; label: string; kind: CommunityKind | "todas" }[] = [
+  { key: "todas", label: "Todas", kind: "todas" },
+  { key: "tnuot", label: "Tnuot", kind: "tnua" },
+  { key: "escuelas", label: "Escuelas", kind: "escuela" },
+  { key: "instituciones", label: "Instituciones", kind: "institucion" },
+  { key: "grupos", label: "Grupos", kind: "grupo" },
+];
+
+const HINTS: Record<string, string> = {
+  todas: "Toda tu comunidad en un solo lugar.",
+  tnuot: "Movimientos juveniles — encuentra tu tnuá y tu kvutzá.",
+  escuelas: "Colegios y su vida comunitaria.",
+  instituciones: "Kehilot y organizaciones de la comunidad.",
+  grupos: "Grupos creados por la comunidad: voluntariado, juegos, liderazgo.",
+};
+
+function norm(s: string) {
+  return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+}
 
 export function DiscoverBrowser({
   communities,
+  live,
 }: {
   communities: DemoCommunity[];
+  live: boolean;
 }) {
-  const [tab, setTab] = useState<"group" | "institution">("group");
+  const [tab, setTab] = useState("todas");
   const [query, setQuery] = useState("");
 
-  const results = useMemo(() => {
-    const q = query.trim().toLowerCase();
+  const active = TABS.find((t) => t.key === tab) ?? TABS[0];
+
+  const list = useMemo(() => {
+    const q = norm(query.trim());
     return communities.filter((c) => {
-      if (c.kind !== tab) return false;
+      const matchesKind = active.kind === "todas" || c.kind === active.kind;
+      if (!matchesKind) return false;
       if (!q) return true;
-      return (
-        c.name.toLowerCase().includes(q) ||
-        c.description.toLowerCase().includes(q) ||
-        c.tags.some((t) => t.toLowerCase().includes(q)) ||
-        c.location.toLowerCase().includes(q)
+      const haystack = norm(
+        `${c.name} ${c.description} ${c.category} ${c.location} ${c.tags.join(" ")}`
       );
+      return haystack.includes(q);
     });
-  }, [communities, tab, query]);
+  }, [communities, active.kind, query]);
 
   return (
-    <>
-      {/* Search */}
+    <div className="px-4 py-4">
+      <h1 className="font-display text-2xl font-bold tracking-tight">Explorar</h1>
+      <p className="mt-1 text-sm text-[var(--muted)]">
+        Encuentra a tu gente — por quién eres, no por seguidores.
+      </p>
+
+      {/* Búsqueda funcional */}
       <div className="relative mt-4">
-        <SearchIcon className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--text-muted)]" />
+        <SearchIcon className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--muted)]" />
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search groups, institutions, causes…"
-          aria-label="Search"
-          className="lynk-input !rounded-full !pl-10"
+          placeholder="Busca tnuot, escuelas, grupos…"
+          className="lynk-input !rounded-full !pl-10 !pr-9"
+          aria-label="Buscar"
         />
-      </div>
-
-      {/* Segmented toggle */}
-      <div className="mt-4 grid grid-cols-2 gap-1 rounded-full bg-[var(--background)] p-1">
-        {(
-          [
-            { key: "group", label: "Groups", Icon: UsersIcon },
-            { key: "institution", label: "Institutions", Icon: BuildingIcon },
-          ] as const
-        ).map(({ key, label, Icon }) => (
+        {query && (
           <button
-            key={key}
-            onClick={() => setTab(key)}
-            className={`press flex items-center justify-center gap-2 rounded-full py-2 text-sm font-semibold transition-colors ${
-              tab === key
-                ? "bg-[var(--surface)] text-[var(--primary)] shadow-sm"
-                : "text-[var(--muted)]"
-            }`}
+            onClick={() => setQuery("")}
+            aria-label="Limpiar búsqueda"
+            className="press absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--foreground)]"
           >
-            <Icon className="h-4 w-4" filled={tab === key} />
-            {label}
+            ✕
           </button>
-        ))}
+        )}
       </div>
 
-      <p className="mt-3 text-xs text-[var(--muted)]">
-        {tab === "group"
-          ? "Informal communities run by people like you."
-          : "Organizations, nonprofits & civic spaces to get involved with."}
-      </p>
+      {/* Filtros por tipo */}
+      <div className="mt-4 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {TABS.map((t) => {
+          const on = t.key === tab;
+          return (
+            <button
+              key={t.key}
+              onClick={() => setTab(t.key)}
+              className={`press shrink-0 rounded-full px-4 py-1.5 text-sm font-semibold transition-colors ${
+                on
+                  ? "bg-[var(--primary)] text-white"
+                  : "bg-[var(--surface)] text-[var(--muted)] hover:bg-[var(--primary-soft)] hover:text-[var(--primary-hover)]"
+              }`}
+            >
+              {t.label}
+            </button>
+          );
+        })}
+      </div>
 
-      {/* Results */}
-      {results.length > 0 ? (
-        <ul className="mt-4 space-y-3">
-          {results.map((c) => (
+      <p className="mt-3 text-xs text-[var(--muted)]">{HINTS[active.key]}</p>
+
+      {!live && (
+        <p className="mt-3 rounded-xl bg-[var(--primary-soft)] px-4 py-2 text-xs text-[var(--primary-hover)]">
+          Datos de ejemplo. Conecta Supabase para usar datos reales.
+        </p>
+      )}
+
+      {/* Resultados */}
+      <ul className="mt-4 space-y-3">
+        {list.map((c) => {
+          const isInstitution = c.kind !== "grupo";
+          return (
             <li key={c.slug}>
               <Link
                 href={`/communities/${c.slug}`}
                 className="press lynk-card flex gap-3 p-4 transition-colors hover:border-[var(--primary)]"
+                style={{ borderLeft: `4px solid ${c.color}` }}
               >
                 <span
                   className={`flex h-12 w-12 shrink-0 items-center justify-center font-bold text-white ${
-                    tab === "institution" ? "rounded-xl" : "rounded-2xl"
+                    isInstitution ? "rounded-xl" : "rounded-2xl"
                   }`}
-                  style={{ background: avatarTint(c.name) }}
+                  style={{ background: c.color }}
                   aria-hidden
                 >
                   {c.name.charAt(0)}
                 </span>
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <h2 className="truncate font-bold">{c.name}</h2>
                   <p className="mt-0.5 line-clamp-2 text-sm text-[var(--muted)]">
                     {c.description}
                   </p>
-                  <div className="mt-2 flex items-center gap-2 text-xs text-[var(--muted)]">
-                    <span className="lynk-tag">{categoryLabel(c.category)}</span>
+                  <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-[var(--muted)]">
+                    <span
+                      className="rounded-full px-2 py-0.5 font-semibold"
+                      style={{ background: `${c.color}1a`, color: c.color }}
+                    >
+                      {c.category}
+                    </span>
+                    {c.mutualFriends > 0 && (
+                      <span className="flex items-center gap-1 font-semibold text-[var(--primary)]">
+                        <UsersIcon className="h-3.5 w-3.5" />
+                        {c.mutualFriends}{" "}
+                        {c.mutualFriends === 1 ? "amigo aquí" : "amigos aquí"}
+                      </span>
+                    )}
                     <span className="flex items-center gap-1">
-                      {tab === "institution" ? (
+                      {isInstitution ? (
                         <BuildingIcon className="h-3.5 w-3.5" />
                       ) : (
                         <UsersIcon className="h-3.5 w-3.5" />
@@ -108,16 +157,14 @@ export function DiscoverBrowser({
                 </div>
               </Link>
             </li>
-          ))}
-        </ul>
-      ) : (
-        <div className="mt-10 text-center">
-          <p className="font-semibold">No matches</p>
-          <p className="mt-1 text-sm text-[var(--muted)]">
-            Try a different search, or switch tabs.
-          </p>
-        </div>
-      )}
-    </>
+          );
+        })}
+        {list.length === 0 && (
+          <li className="py-12 text-center text-sm text-[var(--muted)]">
+            No encontramos nada para “{query}”. Prueba otra búsqueda.
+          </li>
+        )}
+      </ul>
+    </div>
   );
 }
