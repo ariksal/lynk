@@ -42,3 +42,6 @@ next-env.d.ts
 
 # keep the placeholder example, ignore real env files
 !.env.example
+
+# local backups
+*.bak

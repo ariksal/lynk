@@ -12,14 +12,14 @@ export function TopBar() {
       </Link>
       <div className="flex items-center gap-1 text-[var(--foreground)]">
         <button
-          aria-label="Saved communities"
+          aria-label="Comunidades guardadas"
           className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-[var(--primary-soft)]"
         >
           <HeartHandIcon className="h-6 w-6" />
         </button>
         <Link
           href="/messages"
-          aria-label="Messages"
+          aria-label="Mensajes"
           className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-[var(--primary-soft)]"
         >
           <MessageIcon className="h-6 w-6" />

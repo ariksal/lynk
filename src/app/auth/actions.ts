@@ -46,12 +46,14 @@ export async function login(formData: FormData) {
 }
 
 export async function signup(formData: FormData) {
-  const displayName = String(formData.get("display_name") || "New member");
+  const displayName = String(formData.get("display_name") || "Nuevo miembro");
 
-  // 18+ attestation is required server-side too, not just via the checkbox.
-  if (formData.get("age_ok") !== "yes") {
+  // This is a community for MINORS — require guardian consent server-side too.
+  if (formData.get("consent") !== "yes") {
     redirect(
-      `/signup?error=${encodeURIComponent("You must confirm you are 18 or older.")}`
+      `/signup?error=${encodeURIComponent(
+        "Necesitas el consentimiento de tu tutor para crear la cuenta."
+      )}`
     );
   }
 

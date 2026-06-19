@@ -14,12 +14,12 @@ type Profile = {
 };
 
 const DEMO_PROFILE: Profile = {
-  username: "you",
-  display_name: "Your name",
-  bio: "Connect Supabase and finish onboarding to see your real profile here.",
-  location: "Online",
-  interests: ["Hiking", "Reading", "Board games"],
-  values: ["Kindness", "Community", "Curiosity"],
+  username: "tu_usuario",
+  display_name: "Tu nombre",
+  bio: "Conecta Supabase y termina el onboarding para ver tu perfil real aquí.",
+  location: "Ciudad de México",
+  interests: ["Majané", "Música", "Liderazgo"],
+  values: ["Amabilidad", "Comunidad", "Jésed"],
 };
 
 async function getProfile(): Promise<Profile> {
@@ -104,28 +104,28 @@ export default async function ProfilePage() {
             href="/profile/edit"
             className="lynk-btn lynk-btn-ghost shrink-0 px-4 py-2 text-sm"
           >
-            Edit
+            Editar
           </Link>
         </div>
 
         {p.bio && <p className="mt-4 leading-relaxed">{p.bio}</p>}
 
-        <ChipList label="Interests" items={p.interests} />
-        <ChipList label="Values" items={p.values} />
+        <ChipList label="Intereses" items={p.interests} />
+        <ChipList label="Valores" items={p.values} />
 
         <div className="mt-8 border-t border-[var(--border)] pt-4">
           <Link
             href="/safety"
             className="flex items-center gap-2 text-sm font-medium text-[var(--primary)] hover:underline"
           >
-            <ShieldIcon className="h-4 w-4" /> Safety & crisis resources
+            <ShieldIcon className="h-4 w-4" /> Seguridad y recursos de crisis
           </Link>
           <form action={signout} className="mt-4">
             <button
               type="submit"
               className="cursor-pointer text-sm font-medium text-[var(--accent)] hover:underline"
             >
-              Sign out
+              Cerrar sesión
             </button>
           </form>
         </div>

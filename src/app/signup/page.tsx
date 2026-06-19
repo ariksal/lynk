@@ -9,17 +9,17 @@ export default async function SignupPage({
   const { error } = await searchParams;
 
   return (
-    <main className="flex flex-1 items-center justify-center px-6 py-16">
+    <main className="flex flex-1 items-center justify-center px-6 py-12">
       <div className="lynk-card w-full max-w-sm p-8">
         <Link
           href="/"
-          className="text-xl font-extrabold tracking-tight text-[var(--primary)]"
+          className="font-display text-xl font-bold tracking-tight text-[var(--primary)]"
         >
           LYNK
         </Link>
-        <h1 className="mt-6 text-2xl font-bold">Join LYNK</h1>
+        <h1 className="mt-6 font-display text-2xl font-bold">Únete a LYNK</h1>
         <p className="mt-1 text-sm text-[var(--muted)]">
-          Find the people, groups, and communities where you belong.
+          Conecta con tu tnuá, tu escuela y tus grupos.
         </p>
 
         {error && (
@@ -30,21 +30,21 @@ export default async function SignupPage({
 
         <form action={signup} className="mt-6 space-y-4">
           <div>
-            <label className="text-sm font-medium">Your name</label>
+            <label className="text-sm font-medium">Tu nombre</label>
             <input
               name="display_name"
               type="text"
               required
-              placeholder="What should people call you?"
+              placeholder="¿Cómo te dicen?"
               className="lynk-input mt-1"
             />
           </div>
           <div>
-            <label className="text-sm font-medium">Email</label>
+            <label className="text-sm font-medium">Correo</label>
             <input name="email" type="email" required className="lynk-input mt-1" />
           </div>
           <div>
-            <label className="text-sm font-medium">Password</label>
+            <label className="text-sm font-medium">Contraseña</label>
             <input
               name="password"
               type="password"
@@ -53,31 +53,50 @@ export default async function SignupPage({
               className="lynk-input mt-1"
             />
           </div>
-          {/* 18+ attestation — LYNK encourages meeting strangers, so an adult
-              gate is table-stakes. No DOB stored; just a yes/no signal. */}
+
+          {/* Esta es una comunidad para MENORES — por eso pedimos correo del
+              padre/madre/tutor para su consentimiento, en vez de una verja 18+.
+              (Demo: no se almacena nada todavía.) */}
+          <div>
+            <label className="text-sm font-medium">
+              Correo de tu papá/mamá o tutor
+            </label>
+            <input
+              name="guardian_email"
+              type="email"
+              required
+              placeholder="Para el consentimiento del tutor"
+              className="lynk-input mt-1"
+            />
+          </div>
+
           <label className="flex items-start gap-2.5 text-sm">
             <input
-              name="age_ok"
+              name="consent"
               type="checkbox"
               required
               value="yes"
               className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--primary)]"
             />
             <span className="text-[var(--muted)]">
-              I&apos;m 18 or older and I agree to LYNK&apos;s community
-              guidelines.
+              Mi tutor autoriza mi cuenta y acepto las normas de la comunidad.
             </span>
           </label>
 
           <button type="submit" className="lynk-btn w-full py-3">
-            Create account
+            Crear cuenta
           </button>
+
+          <p className="rounded-xl bg-[var(--primary-soft)] px-3 py-2 text-xs text-[var(--primary-hover)]">
+            Tu cuenta pasa por una verificación de pertenencia a la comunidad
+            antes de activarse.
+          </p>
         </form>
 
         <p className="mt-6 text-center text-sm text-[var(--muted)]">
-          Already have an account?{" "}
+          ¿Ya tienes cuenta?{" "}
           <Link href="/login" className="font-semibold text-[var(--primary)]">
-            Log in
+            Iniciar sesión
           </Link>
         </p>
       </div>

@@ -13,7 +13,7 @@ export function JoinButton({ communityName }: { communityName: string }) {
         const next = !joined;
         setJoined(next);
         toast(
-          next ? `You joined ${communityName}` : `You left ${communityName}`
+          next ? `Te uniste a ${communityName}` : `Saliste de ${communityName}`
         );
       }}
       className={`press mt-4 flex w-full items-center justify-center gap-2 rounded-full py-3 font-semibold transition-colors ${
@@ -35,10 +35,10 @@ export function JoinButton({ communityName }: { communityName: string }) {
           >
             <path d="m5 12 4.5 4.5L19 7" />
           </svg>
-          Joined
+          Te uniste
         </>
       ) : (
-        "Join community"
+        "Unirme"
       )}
     </button>
   );

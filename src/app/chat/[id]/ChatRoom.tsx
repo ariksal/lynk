@@ -54,11 +54,11 @@ export function ChatRoom({ conversation }: { conversation: Conversation }) {
   // invisibility in RLS; the toast is the acknowledgement, not the enforcement.
   function handleReport() {
     setMenuOpen(false);
-    toast(`Thanks — we received your report about ${firstName}.`);
+    toast(`Gracias — recibimos tu reporte sobre ${firstName}.`);
   }
   function handleBlock() {
     setMenuOpen(false);
-    toast(`You blocked ${firstName}. They can no longer reach you.`);
+    toast(`Bloqueaste a ${firstName}. Ya no podrá contactarte.`);
     router.push("/messages");
   }
 
@@ -83,7 +83,7 @@ export function ChatRoom({ conversation }: { conversation: Conversation }) {
       <header className="flex items-center gap-3 border-b border-[var(--border)] px-4 py-3">
         <button
           onClick={() => router.push("/messages")}
-          aria-label="Back"
+          aria-label="Atrás"
           className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-[var(--foreground)] transition-colors hover:bg-[var(--primary-soft)]"
         >
           <ChevronLeftIcon className="h-6 w-6" />
@@ -113,7 +113,7 @@ export function ChatRoom({ conversation }: { conversation: Conversation }) {
                   : "text-[var(--text-muted)]"
               }`}
             >
-              {conversation.isOnline ? "Online" : "Last seen 3h ago"}
+              {conversation.isOnline ? "En línea" : "Última vez hace 3h"}
             </p>
           </div>
         </div>
@@ -121,7 +121,7 @@ export function ChatRoom({ conversation }: { conversation: Conversation }) {
         <div className="relative shrink-0">
           <button
             onClick={() => setMenuOpen((o) => !o)}
-            aria-label="Conversation options"
+            aria-label="Opciones de conversación"
             aria-haspopup="menu"
             aria-expanded={menuOpen}
             className="press flex h-9 w-9 items-center justify-center rounded-full text-[var(--foreground)] hover:bg-[var(--primary-soft)]"
@@ -150,7 +150,7 @@ export function ChatRoom({ conversation }: { conversation: Conversation }) {
                   className="press flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm hover:bg-[var(--background)]"
                 >
                   <FlagIcon className="h-5 w-5 text-[var(--muted)]" />
-                  Report this person
+                  Reportar a esta persona
                 </button>
                 <button
                   role="menuitem"
@@ -158,7 +158,7 @@ export function ChatRoom({ conversation }: { conversation: Conversation }) {
                   className="press flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm text-[var(--accent)] hover:bg-[var(--accent-soft)]"
                 >
                   <NoEntryIcon className="h-5 w-5" />
-                  Block {firstName}
+                  Bloquear a {firstName}
                 </button>
                 <Link
                   role="menuitem"
@@ -167,7 +167,7 @@ export function ChatRoom({ conversation }: { conversation: Conversation }) {
                   className="press flex w-full items-center gap-3 border-t border-[var(--border)] px-3 py-2.5 text-left text-sm hover:bg-[var(--background)]"
                 >
                   <ShieldIcon className="h-5 w-5 text-[var(--primary)]" />
-                  Safety resources
+                  Recursos de seguridad
                 </Link>
               </div>
             </>
@@ -182,20 +182,20 @@ export function ChatRoom({ conversation }: { conversation: Conversation }) {
           <div className="m-4 rounded-2xl border border-[var(--border)] bg-[var(--accent-soft)] p-4">
             <p className="text-sm leading-5 text-[var(--foreground)]">
               <span className="font-semibold">{conversation.personName}</span>{" "}
-              wants to start a conversation with you.
+              quiere iniciar una conversación contigo.
             </p>
             <div className="mt-3 flex gap-2.5">
               <button
                 onClick={() => setPending(false)}
                 className="flex-1 cursor-pointer rounded-full bg-[var(--success)] py-2.5 text-sm font-semibold text-white"
               >
-                Accept conversation
+                Aceptar conversación
               </button>
               <button
                 onClick={() => router.push("/messages")}
                 className="flex-1 cursor-pointer rounded-full border border-[var(--border)] py-2.5 text-sm font-semibold text-[var(--muted)]"
               >
-                Ignore
+                Ignorar
               </button>
             </div>
           </div>
@@ -235,13 +235,13 @@ export function ChatRoom({ conversation }: { conversation: Conversation }) {
       <div className="border-t border-[var(--border)] bg-[var(--surface)] px-4 py-2.5">
         {atLimit ? (
           <p className="py-2 text-center text-[13px] text-[var(--accent)]">
-            You&apos;ve sent {MESSAGE_LIMIT} messages. Wait for {firstName} to
-            reply.
+            Enviaste {MESSAGE_LIMIT} mensajes. Espera a que {firstName}
+            responda.
           </p>
         ) : (
           <div className="flex items-center gap-2.5">
             <button
-              aria-label="Add image"
+              aria-label="Agregar imagen"
               className="flex h-9 w-9 shrink-0 items-center justify-center text-[var(--text-muted)]"
             >
               <ImageIcon className="h-[22px] w-[22px]" />
@@ -250,13 +250,13 @@ export function ChatRoom({ conversation }: { conversation: Conversation }) {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSend()}
-              placeholder="Write a message…"
+              placeholder="Escribe un mensaje…"
               className="flex-1 rounded-3xl bg-[var(--background)] px-4 py-2.5 text-[15px] outline-none placeholder:text-[var(--text-muted)]"
             />
             <button
               onClick={handleSend}
               disabled={!input.trim()}
-              aria-label="Send"
+              aria-label="Enviar"
               className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors ${
                 input.trim()
                   ? "cursor-pointer bg-[var(--primary)] text-white"

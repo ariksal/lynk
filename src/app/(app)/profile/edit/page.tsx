@@ -18,12 +18,12 @@ type Profile = {
 // In demo mode there's no real account, so we pre-fill with the same sample
 // profile the /profile page shows — editing never starts from blank.
 const DEMO_PROFILE: Profile = {
-  username: "you",
-  display_name: "Your name",
-  bio: "Connect Supabase and finish onboarding to see your real profile here.",
-  location: "Austin, TX",
-  interests: ["Hiking", "Reading", "Board games"],
-  values: ["Kindness", "Community", "Curiosity"],
+  username: "tu_usuario",
+  display_name: "Tu nombre",
+  bio: "Conecta Supabase y termina el onboarding para ver tu perfil real aquí.",
+  location: "Ciudad de México",
+  interests: ["Majané", "Música", "Liderazgo"],
+  values: ["Amabilidad", "Comunidad", "Jésed"],
 };
 
 async function getProfile(): Promise<Profile> {
@@ -56,13 +56,13 @@ export default async function EditProfilePage() {
       <div className="flex items-center gap-2">
         <Link
           href="/profile"
-          aria-label="Back"
+          aria-label="Atrás"
           className="press flex h-9 w-9 items-center justify-center rounded-full hover:bg-[var(--primary-soft)]"
         >
           <ChevronLeftIcon className="h-6 w-6" />
         </Link>
         <h1 className="font-display text-2xl font-extrabold tracking-tight">
-          Edit profile
+          Editar perfil
         </h1>
       </div>
 
@@ -71,7 +71,7 @@ export default async function EditProfilePage() {
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="text-sm font-medium">Username</label>
+            <label className="text-sm font-medium">Nombre de usuario</label>
             <input
               name="username"
               required
@@ -80,7 +80,7 @@ export default async function EditProfilePage() {
             />
           </div>
           <div>
-            <label className="text-sm font-medium">Display name</label>
+            <label className="text-sm font-medium">Nombre para mostrar</label>
             <input
               name="display_name"
               required
@@ -91,7 +91,7 @@ export default async function EditProfilePage() {
         </div>
 
         <div>
-          <label className="text-sm font-medium">A short bio</label>
+          <label className="text-sm font-medium">Una bio breve</label>
           <textarea
             name="bio"
             rows={3}
@@ -101,45 +101,45 @@ export default async function EditProfilePage() {
         </div>
 
         <div>
-          <label className="text-sm font-medium">City</label>
+          <label className="text-sm font-medium">Ciudad</label>
           <input
             name="location"
             defaultValue={p.location ?? ""}
-            placeholder="City or 'Online'"
+            placeholder="Ciudad o 'En línea'"
             className="lynk-input mt-1"
           />
           <p className="mt-1 text-xs text-[var(--muted)]">
-            City only — never your address. Your city is visible to people and
-            communities you join.
+            Solo la ciudad — nunca tu dirección. Tu ciudad es visible para las
+            personas y comunidades a las que te unes.
           </p>
         </div>
 
         <div>
-          <label className="text-sm font-medium">Your interests</label>
+          <label className="text-sm font-medium">Tus intereses</label>
           <div className="mt-2">
             <ChipPicker
               name="interests"
               options={INTERESTS}
               initial={p.interests}
-              hint="These help us find your people."
+              hint="Esto nos ayuda a encontrar a tu gente."
             />
           </div>
         </div>
 
         <div>
-          <label className="text-sm font-medium">What you value</label>
+          <label className="text-sm font-medium">Lo que valoras</label>
           <div className="mt-2">
             <ChipPicker
               name="values"
               options={VALUES}
               initial={p.values}
-              hint="The things that matter to you."
+              hint="Las cosas que te importan."
             />
           </div>
         </div>
 
         <button type="submit" className="lynk-btn w-full py-3">
-          Save changes
+          Guardar cambios
         </button>
       </form>
     </div>

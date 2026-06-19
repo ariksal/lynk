@@ -41,9 +41,18 @@ export default function FeedPage() {
                 href={`/communities/${c.slug}`}
                 className="flex w-16 flex-col items-center gap-1"
               >
-                <span className="rounded-full bg-gradient-to-tr from-[var(--accent)] to-[var(--primary)] p-[2px]">
+                <span
+                  className="rounded-full p-[2.5px]"
+                  style={{ background: c.color }}
+                >
                   <span className="block rounded-full bg-[var(--surface)] p-[2px]">
-                    <Avatar name={c.name} size={56} />
+                    <span
+                      className="flex items-center justify-center rounded-full font-bold text-white"
+                      style={{ width: 56, height: 56, background: c.color, fontSize: 22 }}
+                      aria-hidden
+                    >
+                      {c.name.charAt(0)}
+                    </span>
                   </span>
                 </span>
                 <span className="w-16 truncate text-center text-[0.68rem] text-[var(--muted)]">
@@ -85,7 +94,7 @@ export default function FeedPage() {
                 className="mt-3 inline-flex items-center gap-1.5 text-sm text-[var(--muted)] transition-colors hover:text-[var(--primary)]"
               >
                 <MessageIcon className="h-5 w-5" />
-                {item.replies} replies — join the conversation
+                {item.replies} respuestas — únete a la conversación
               </Link>
             </article>
           </li>
@@ -93,9 +102,9 @@ export default function FeedPage() {
       </ul>
 
       <p className="px-4 py-8 text-center text-sm text-[var(--muted)]">
-        You&apos;re all caught up. Go{" "}
+        Estás al día. Ve a{" "}
         <Link href="/discover" className="font-semibold text-[var(--primary)]">
-          discover more communities
+          explora más comunidades
         </Link>
         .
       </p>

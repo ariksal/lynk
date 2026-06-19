@@ -41,7 +41,7 @@ function PersonRow({
           ))}
           {person.mutualCommunity && (
             <span className="text-[0.68rem] text-[var(--muted)]">
-              · in {person.mutualCommunity}
+              · en {person.mutualCommunity}
             </span>
           )}
         </div>
@@ -49,7 +49,7 @@ function PersonRow({
       {action === "message" ? (
         <Link
           href={`/chat/${person.username}`}
-          aria-label={`Message ${person.name}`}
+          aria-label={`Enviar mensaje a ${person.name}`}
           className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-[var(--primary)] transition-colors hover:bg-[var(--primary-soft)]"
         >
           <MessageIcon className="h-5 w-5" />
@@ -66,17 +66,17 @@ export default function FriendsPage() {
     <div>
       <div className="px-4 py-4">
         <h1 className="font-display text-2xl font-extrabold tracking-tight">
-          Friends
+          Amigos
         </h1>
         <p className="mt-1 text-sm text-[var(--muted)]">
-          The people you&apos;ve connected with — and the ones you might click
-          with next.
+          Las personas con quienes ya conectaste — y las que podrías conectar
+          después.
         </p>
       </div>
 
       {/* Your circle */}
       <h2 className="flex items-center gap-2 px-4 pb-1 pt-2 text-xs font-bold uppercase tracking-wide text-[var(--muted)]">
-        <UsersIcon className="h-4 w-4" /> Your circle
+        <UsersIcon className="h-4 w-4" /> Tu círculo
       </h2>
       <ul>
         {DEMO_CIRCLE.map((p) => (
@@ -86,10 +86,10 @@ export default function FriendsPage() {
 
       {/* Suggestions */}
       <h2 className="flex items-center gap-2 px-4 pb-1 pt-6 text-xs font-bold uppercase tracking-wide text-[var(--muted)]">
-        <UserPlusIcon className="h-4 w-4" /> People you might click with
+        <UserPlusIcon className="h-4 w-4" /> Personas con quienes podrías conectar
       </h2>
       <p className="px-4 pb-2 text-xs text-[var(--muted)]">
-        Matched on shared interests and communities — never on popularity.
+        Emparejado por intereses y comunidades en común — nunca por popularidad.
       </p>
       <ul>
         {DEMO_SUGGESTED.map((p) => (

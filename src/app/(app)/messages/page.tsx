@@ -45,7 +45,7 @@ function Row({ c }: { c: Conversation }) {
           </p>
           {c.isPending && (
             <span className="rounded-full bg-[var(--accent-soft)] px-2 py-0.5 text-[0.68rem] font-semibold text-[var(--accent)]">
-              New
+              Nuevo
             </span>
           )}
         </div>
@@ -83,11 +83,11 @@ export default function MessagesPage() {
       {/* Header */}
       <div className="flex items-center justify-between px-5 pt-4 pb-3">
         <h1 className="font-display text-2xl font-extrabold tracking-tight">
-          Messages
+          Mensajes
         </h1>
         <Link
           href="/discover"
-          aria-label="New message"
+          aria-label="Mensaje nuevo"
           className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--primary-soft)] text-[var(--primary)] transition-colors hover:bg-[var(--primary)] hover:text-white"
         >
           <PencilIcon className="h-[18px] w-[18px]" />
@@ -97,8 +97,8 @@ export default function MessagesPage() {
       {/* Tabs */}
       <div className="flex border-b border-[var(--border)]">
         {([
-          { key: "all", label: "All", count: 0 },
-          { key: "requests", label: "Requests", count: pending.length },
+          { key: "all", label: "Todos", count: 0 },
+          { key: "requests", label: "Solicitudes", count: pending.length },
         ] as const).map((t) => (
           <button
             key={t.key}
@@ -124,7 +124,7 @@ export default function MessagesPage() {
         <div className="m-3.5 mb-0 flex items-start gap-2 rounded-2xl bg-[var(--primary-soft)] p-3.5">
           <ShieldIcon className="mt-0.5 h-4 w-4 shrink-0 text-[var(--primary)]" />
           <p className="text-[13px] leading-5 text-[var(--primary)]">
-            You decide who you talk to. No one knows if you ignore a message.
+            Tú decides con quién hablas. Nadie sabe si ignoras un mensaje.
           </p>
         </div>
       )}
@@ -144,16 +144,16 @@ export default function MessagesPage() {
             <MessageIcon className="h-7 w-7" />
           </span>
           <p className="mt-4 font-semibold">
-            {tab === "all" ? "No conversations yet" : "No requests"}
+            {tab === "all" ? "Aún no tienes conversaciones" : "Sin solicitudes"}
           </p>
           <p className="mt-1 max-w-xs text-sm text-[var(--muted)]">
             {tab === "all"
-              ? "Find people who share your interests and say hello."
-              : "Message requests from new people will show up here."}
+              ? "Encuentra personas con tus mismos intereses y salúdalas."
+              : "Las solicitudes de personas nuevas aparecerán aquí."}
           </p>
           {tab === "all" && (
             <Link href="/discover" className="lynk-btn mt-5 px-5 py-2.5 text-sm">
-              Explore
+              Explorar
             </Link>
           )}
         </div>

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { categoryLabel } from "@/lib/categories";
 import {
   DEMO_COMMUNITIES,
   DEMO_POSTS,
@@ -22,7 +21,7 @@ async function getCommunity(
       const supabase = await createClient();
       const { data: community } = await supabase
         .from("communities")
-        .select("slug, name, description, category, tags, location")
+        .select("slug, name, description, category, kind, color, tags, location")
         .eq("slug", slug)
         .single();
       if (community) {
@@ -38,14 +37,14 @@ async function getCommunity(
           }) => ({
             id: p.id,
             body: p.body,
-            author: p.profiles?.display_name ?? "A member",
+            author: p.profiles?.display_name ?? "Un miembro",
             ago: "",
           })
         );
         return { community: community as DemoCommunity, posts: mapped, live: true };
       }
     } catch {
-      // fall through to demo
+      // continúa a demo
     }
   }
 
@@ -67,39 +66,45 @@ export default async function CommunityPage({
   const result = await getCommunity(slug);
   if (!result) notFound();
   const { community, posts } = result;
-  const tint = avatarTint(community.name);
+  const color = community.color;
+  const isInstitution = community.kind !== "grupo";
 
   return (
     <div>
-      {/* Cover header */}
+      {/* Portada con el color del movimiento */}
       <div
         className="relative h-32"
-        style={{
-          background: `linear-gradient(135deg, ${tint}, var(--primary-hover))`,
-        }}
+        style={{ background: `linear-gradient(135deg, ${color}, ${color}99)` }}
       >
         <Link
           href="/discover"
-          aria-label="Back"
-          className="absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur transition-colors hover:bg-black/30"
+          aria-label="Atrás"
+          className="press absolute left-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur hover:bg-black/30"
         >
           <ChevronLeftIcon className="h-6 w-6" />
         </Link>
       </div>
 
       <div className="px-4">
-        {/* Avatar overlapping the cover */}
+        {/* Avatar montado sobre la portada */}
         <span
-          className="-mt-9 flex h-18 w-18 items-center justify-center rounded-3xl border-4 border-[var(--surface)] text-2xl font-bold text-white"
-          style={{ width: 72, height: 72, background: tint }}
+          className={`-mt-9 flex items-center justify-center border-4 border-[var(--surface)] text-2xl font-bold text-white ${
+            isInstitution ? "rounded-2xl" : "rounded-3xl"
+          }`}
+          style={{ width: 72, height: 72, background: color }}
           aria-hidden
         >
           {community.name.charAt(0)}
         </span>
 
-        <h1 className="mt-3 text-xl font-extrabold">{community.name}</h1>
+        <h1 className="mt-3 font-display text-xl font-bold">{community.name}</h1>
         <div className="mt-1 flex items-center gap-2 text-xs text-[var(--muted)]">
-          <span className="lynk-tag">{categoryLabel(community.category)}</span>
+          <span
+            className="rounded-full px-2 py-0.5 font-semibold"
+            style={{ background: `${color}1a`, color }}
+          >
+            {community.category}
+          </span>
           <span className="flex items-center gap-1">
             <UsersIcon className="h-3.5 w-3.5" />
             {community.location}
@@ -114,7 +119,8 @@ export default async function CommunityPage({
           {community.tags.map((t) => (
             <span
               key={t}
-              className="rounded-full bg-[var(--background)] px-2.5 py-0.5 text-xs text-[var(--muted)]"
+              className="rounded-full bg-[var(--surface)] px-2.5 py-0.5 text-xs text-[var(--muted)]"
+              style={{ border: `1px solid ${color}33` }}
             >
               #{t}
             </span>
@@ -124,10 +130,10 @@ export default async function CommunityPage({
         <JoinButton communityName={community.name} />
       </div>
 
-      {/* Conversation */}
+      {/* Conversación */}
       <div className="mt-6 border-t border-[var(--border)]">
         <h2 className="flex items-center gap-2 px-4 pt-4 text-sm font-bold text-[var(--muted)]">
-          <MessageIcon className="h-4 w-4" /> CONVERSATION
+          <MessageIcon className="h-4 w-4" /> CONVERSACIÓN
         </h2>
         <ul>
           {posts.map((p) => (

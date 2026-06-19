@@ -10,10 +10,10 @@ import {
 } from "@/components/icons";
 
 const TABS = [
-  { href: "/feed", label: "Home", Icon: HomeIcon },
-  { href: "/discover", label: "Discover", Icon: CompassIcon },
-  { href: "/friends", label: "Friends", Icon: UsersIcon },
-  { href: "/profile", label: "Profile", Icon: UserIcon },
+  { href: "/feed", label: "Inicio", Icon: HomeIcon },
+  { href: "/discover", label: "Explorar", Icon: CompassIcon },
+  { href: "/friends", label: "Amigos", Icon: UsersIcon },
+  { href: "/profile", label: "Perfil", Icon: UserIcon },
 ];
 
 export function BottomNav() {

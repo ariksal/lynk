@@ -2,16 +2,16 @@ import Link from "next/link";
 
 const PILLARS = [
   {
-    title: "Authenticity over performance",
-    body: "No follower counts. No likes. No popularity contests. You are valued for who you are, not for the attention you attract.",
+    title: "Autenticidad sobre apariencia",
+    body: "Sin número de seguidores. Sin likes. Sin concursos de popularidad. Vales por quien eres, no por la atención que atraes.",
   },
   {
-    title: "Belonging over broadcasting",
-    body: "LYNK connects you with people, groups, and communities that share your interests, values, and identity.",
+    title: "Pertenencia, no exhibición",
+    body: "LYNK te conecta con personas, grupos y comunidades que comparten tus intereses, valores e identidad.",
   },
   {
-    title: "Real relationships over reach",
-    body: "Looking for friends, a social circle, a volunteering cause, or simply a place where you feel understood — start here.",
+    title: "Relaciones reales sobre alcance",
+    body: "¿Buscas amigos, un círculo social, una causa de jésed o simplemente un lugar donde te sientas comprendido? Empieza aquí.",
   },
 ];
 
@@ -25,34 +25,35 @@ export default function Home() {
         </span>
         <nav className="flex items-center gap-3">
           <Link href="/login" className="lynk-btn lynk-btn-ghost px-4 py-2 text-sm">
-            Log in
+            Iniciar sesión
           </Link>
           <Link href="/signup" className="lynk-btn px-4 py-2 text-sm">
-            Join LYNK
+            Únete a LYNK
           </Link>
         </nav>
       </header>
 
       {/* Hero */}
       <section className="mx-auto max-w-3xl px-6 pt-12 pb-16 text-center">
-        <span className="lynk-tag mb-6">A community platform, not a stage</span>
+        <span className="lynk-tag mb-6">Una plataforma de comunidad, no un escenario</span>
         <h1 className="font-display text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl">
-          Find where you{" "}
-          <span className="text-[var(--primary)]">belong</span>.
+          Encuentra dónde{" "}
+          <span className="text-[var(--primary)]">perteneces</span>.
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-lg text-[var(--muted)]">
-          We&apos;ve never been more connected, yet never felt more alone. LYNK
-          exists to reduce loneliness — by helping you find your people.
+          Nunca habíamos estado tan conectados y, sin embargo, nunca nos habíamos
+          sentido tan solos. LYNK existe para reducir la soledad, ayudándote a
+          encontrar a tu gente.
         </p>
         <div className="mt-9 flex items-center justify-center gap-3">
           <Link href="/signup" className="lynk-btn px-6 py-3 text-base">
-            Find your people
+            Encuentra a tu gente
           </Link>
           <Link
             href="/discover"
             className="lynk-btn lynk-btn-ghost px-6 py-3 text-base"
           >
-            Explore communities
+            Explora comunidades
           </Link>
         </div>
       </section>
@@ -73,15 +74,15 @@ export default function Home() {
       <section className="bg-[var(--primary-soft)] py-16">
         <div className="mx-auto max-w-2xl px-6 text-center">
           <p className="text-xl font-semibold leading-relaxed text-[var(--primary-hover)] sm:text-2xl">
-            No one should miss out on friendship, community, or belonging simply
-            because they didn&apos;t know where to start.
+            Nadie debería quedarse sin amistad, comunidad o pertenencia
+            simplemente porque no sabía por dónde empezar.
           </p>
         </div>
       </section>
 
       <footer className="mx-auto max-w-5xl px-6 py-10 text-sm text-[var(--muted)]">
-        <span className="font-bold text-[var(--primary)]">LYNK</span> — reduce
-        loneliness by helping people find their people.
+        <span className="font-bold text-[var(--primary)]">LYNK</span> — reduce la
+        soledad ayudando a las personas a encontrar a su gente.
       </footer>
     </main>
   );

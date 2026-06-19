@@ -17,9 +17,9 @@ export default async function LoginPage({
         >
           LYNK
         </Link>
-        <h1 className="mt-6 text-2xl font-bold">Welcome back</h1>
+        <h1 className="mt-6 text-2xl font-bold">Qué bueno verte de nuevo</h1>
         <p className="mt-1 text-sm text-[var(--muted)]">
-          Good to see you again.
+          Qué gusto verte otra vez.
         </p>
 
         {error && (
@@ -30,11 +30,11 @@ export default async function LoginPage({
 
         <form action={login} className="mt-6 space-y-4">
           <div>
-            <label className="text-sm font-medium">Email</label>
+            <label className="text-sm font-medium">Correo</label>
             <input name="email" type="email" required className="lynk-input mt-1" />
           </div>
           <div>
-            <label className="text-sm font-medium">Password</label>
+            <label className="text-sm font-medium">Contraseña</label>
             <input
               name="password"
               type="password"
@@ -43,14 +43,14 @@ export default async function LoginPage({
             />
           </div>
           <button type="submit" className="lynk-btn w-full py-3">
-            Log in
+            Iniciar sesión
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-[var(--muted)]">
-          New to LYNK?{" "}
+          ¿Nuevo en LYNK?{" "}
           <Link href="/signup" className="font-semibold text-[var(--primary)]">
-            Create an account
+            Crear cuenta
           </Link>
         </p>
       </div>
