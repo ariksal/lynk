@@ -1,0 +1,189 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   LYNK design tokens — juventud de la comunidad judía mexicana.
+   Estilo vibrante y juvenil: azul comunidad como base + acentos cálidos. Cada
+   tnuá/escuela aporta su propio color (campo `color`), así la interfaz es
+   multicolor por movimiento. Animaciones con overshoot para una sensación
+   interactiva y divertida; reduced-motion respetado.
+   ========================================================================== */
+:root {
+  --background: #f3f6fd;       /* azul muy claro, fresco */
+  --surface: #ffffff;
+  --foreground: #15213b;       /* azul tinta */
+  --muted: #5b6884;            /* gris-azul */
+  --text-muted: #94a0b8;
+  --border: #e4e9f4;
+  --primary: #2563eb;          /* azul comunidad — pertenencia */
+  --primary-hover: #1d4ed8;
+  --primary-soft: #e0ecff;
+  --accent: #f97316;           /* naranja cálido — energía juvenil */
+  --accent-soft: #ffedd5;
+  --reward: #fbbf24;           /* dorado — celebración */
+  --success: #22c55e;
+  --radius: 1.1rem;
+  /* "Pop" con rebote — registra como sorpresa positiva. */
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --glow: 0 4px 18px -2px rgba(37, 99, 235, 0.4);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-text-muted: var(--text-muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-reward: var(--reward);
+  --color-success: var(--success);
+  --font-sans: var(--font-nunito);
+  --font-display: var(--font-fredoka);
+  --radius-app: var(--radius);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-nunito), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: contain;
+}
+
+/* Visible keyboard focus on every interactive element. */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--primary-soft), 0 0 0 4.5px var(--primary);
+  border-radius: 0.6rem;
+}
+
+/* Instant tactile feedback with an overshoot release (<500ms; McClure 2004). */
+.press {
+  transition: transform 0.15s var(--ease-pop), background-color 0.15s ease,
+    opacity 0.15s ease;
+}
+.press:active {
+  transform: scale(0.92);
+}
+
+/* Skeleton shimmer for loading states. */
+.skeleton {
+  background: linear-gradient(
+    100deg,
+    var(--border) 30%,
+    #fff3e6 50%,
+    var(--border) 70%
+  );
+  background-size: 200% 100%;
+  animation: lynk-shimmer 1.3s ease-in-out infinite;
+  border-radius: 0.6rem;
+}
+@keyframes lynk-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Routed-page entrance — a small overshoot "arrival" (Knutson 2001 cue). */
+@keyframes lynk-fade-up {
+  from { opacity: 0; transform: translateY(10px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+.animate-in {
+  animation: lynk-fade-up 0.38s var(--ease-pop) both;
+}
+
+/* Reward pop — celebratory overshoot for confirmations (toasts, "Joined"). */
+@keyframes lynk-reward-pop {
+  0% { opacity: 0; transform: translateY(8px) scale(0.8); }
+  60% { transform: translateY(0) scale(1.06); }
+  100% { opacity: 1; transform: none; }
+}
+.reward-pop {
+  animation: lynk-reward-pop 0.42s var(--ease-pop) both;
+}
+
+/* Heartbeat pulse for unread / attention badges. */
+@keyframes lynk-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 45, 111, 0.5); }
+  50% { transform: scale(1.12); box-shadow: 0 0 0 5px rgba(255, 45, 111, 0); }
+}
+.pulse {
+  animation: lynk-pulse 1.6s ease-in-out infinite;
+}
+
+/* Honor users who prefer less motion — accessibility guardrail kept intact. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Titles use Raleway, matching the mobile app's display type. */
+.font-display {
+  font-family: var(--font-fredoka), system-ui, sans-serif;
+}
+
+/* Reusable building blocks */
+.lynk-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.lynk-tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.78rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary-hover);
+}
+.lynk-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #fff;
+  padding: 0.6rem 1.25rem;
+  box-shadow: var(--glow);
+  transition: background 0.15s ease, transform 0.15s var(--ease-pop),
+    box-shadow 0.15s ease;
+}
+.lynk-btn:hover {
+  background: var(--primary-hover);
+  box-shadow: 0 6px 22px -2px rgba(249, 115, 22, 0.55);
+}
+.lynk-btn:active { transform: scale(0.94); }
+.lynk-btn-ghost {
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  box-shadow: none;
+}
+.lynk-btn-ghost:hover { background: var(--primary-soft); color: var(--primary-hover); }
+.lynk-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  padding: 0.65rem 0.85rem;
+  outline: none;
+}
+.lynk-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
