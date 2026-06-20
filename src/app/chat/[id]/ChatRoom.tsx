@@ -19,6 +19,14 @@ import {
   ShieldIcon,
 } from "@/components/icons";
 import { useToast } from "@/components/Toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 // Until a request is accepted, the sender may send at most this many messages.
 const MESSAGE_LIMIT = 2;
@@ -31,7 +39,6 @@ export function ChatRoom({ conversation }: { conversation: Conversation }) {
   const [messages, setMessages] = useState<ChatMessage[]>(conversation.messages);
   const [input, setInput] = useState("");
   const [pending, setPending] = useState(conversation.isPending);
-  const [menuOpen, setMenuOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const sentCount = messages.filter((m) => m.type === "sent").length;
@@ -53,12 +60,10 @@ export function ChatRoom({ conversation }: { conversation: Conversation }) {
   // Supabase these must persist (blocks/reports tables) and enforce both-way
   // invisibility in RLS; the toast is the acknowledgement, not the enforcement.
   function handleReport() {
-    setMenuOpen(false);
     toast(`Gracias — recibimos tu reporte sobre ${firstName}.`);
   }
   function handleBlock() {
-    setMenuOpen(false);
-    toast(`Bloqueaste a ${firstName}. Ya no podrá contactarte.`);
+    toast(`Bloqueaste a ${firstName}. Ya no podrá contactarte.`, "info");
     router.push("/messages");
   }
 
@@ -118,61 +123,36 @@ export function ChatRoom({ conversation }: { conversation: Conversation }) {
           </div>
         </div>
 
-        <div className="relative shrink-0">
-          <button
-            onClick={() => setMenuOpen((o) => !o)}
-            aria-label="Opciones de conversación"
-            aria-haspopup="menu"
-            aria-expanded={menuOpen}
-            className="press flex h-9 w-9 items-center justify-center rounded-full text-[var(--foreground)] hover:bg-[var(--primary-soft)]"
-          >
-            <MoreIcon className="h-5 w-5" />
-          </button>
-
-          {menuOpen && (
-            <>
-              <button
-                aria-hidden
-                tabIndex={-1}
-                onClick={() => setMenuOpen(false)}
-                className="fixed inset-0 z-10 cursor-default"
-              />
-              <div
-                role="menu"
-                className="animate-in absolute right-0 top-11 z-20 w-56 overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] py-1 shadow-xl"
-              >
-                <span className="flex items-center gap-2 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-wide text-[var(--text-muted)]">
-                  <UserIcon className="h-3.5 w-3.5" /> {conversation.personName}
-                </span>
-                <button
-                  role="menuitem"
-                  onClick={handleReport}
-                  className="press flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm hover:bg-[var(--background)]"
-                >
-                  <FlagIcon className="h-5 w-5 text-[var(--muted)]" />
-                  Reportar a esta persona
-                </button>
-                <button
-                  role="menuitem"
-                  onClick={handleBlock}
-                  className="press flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm text-[var(--accent)] hover:bg-[var(--accent-soft)]"
-                >
-                  <NoEntryIcon className="h-5 w-5" />
-                  Bloquear a {firstName}
-                </button>
-                <Link
-                  role="menuitem"
-                  href="/safety"
-                  onClick={() => setMenuOpen(false)}
-                  className="press flex w-full items-center gap-3 border-t border-[var(--border)] px-3 py-2.5 text-left text-sm hover:bg-[var(--background)]"
-                >
-                  <ShieldIcon className="h-5 w-5 text-[var(--primary)]" />
-                  Recursos de seguridad
-                </Link>
-              </div>
-            </>
-          )}
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              aria-label="Opciones de conversación"
+              className="press flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[var(--foreground)] hover:bg-[var(--primary-soft)]"
+            >
+              <MoreIcon className="h-5 w-5" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56 rounded-2xl">
+            <DropdownMenuLabel className="flex items-center gap-2 text-[var(--text-muted)]">
+              <UserIcon className="h-3.5 w-3.5" /> {conversation.personName}
+            </DropdownMenuLabel>
+            <DropdownMenuItem onClick={handleReport}>
+              <FlagIcon className="h-5 w-5 text-[var(--muted)]" />
+              Reportar a esta persona
+            </DropdownMenuItem>
+            <DropdownMenuItem variant="destructive" onClick={handleBlock}>
+              <NoEntryIcon className="h-5 w-5" />
+              Bloquear a {firstName}
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link href="/safety">
+                <ShieldIcon className="h-5 w-5 text-[var(--primary)]" />
+                Recursos de seguridad
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </header>
 
       {/* Messages */}

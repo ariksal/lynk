@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+/* shadcn/ui usa el variant dark; lo declaramos aunque por ahora vamos en claro. */
+@custom-variant dark (&:is(.dark *));
 
 /* ==========================================================================
    LYNK design tokens — juventud de la comunidad judía mexicana.
@@ -14,6 +18,7 @@
   --muted: #5b6884;            /* gris-azul */
   --text-muted: #94a0b8;
   --border: #e4e9f4;
+  --muted-bg: #eef1f8;         /* fondo neutro claro (para shadcn bg-muted) */
   --primary: #2563eb;          /* azul comunidad — pertenencia */
   --primary-hover: #1d4ed8;
   --primary-soft: #e0ecff;
@@ -31,22 +36,44 @@
 }
 
 @theme inline {
-  --color-background: var(--background);
+  /* Tokens propios de LYNK (los usan los componentes vía var() directo). */
   --color-surface: var(--surface);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
   --color-text-muted: var(--text-muted);
-  --color-border: var(--border);
-  --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
   --color-primary-soft: var(--primary-soft);
-  --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
   --color-reward: var(--reward);
   --color-success: var(--success);
+
+  /* Tokens semánticos que esperan los componentes de shadcn/ui,
+     mapeados a la paleta de LYNK (muted = fondo claro, no texto). */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: #ffffff;
+  --color-secondary: var(--primary-soft);
+  --color-secondary-foreground: var(--primary-hover);
+  --color-muted: var(--muted-bg);
+  --color-muted-foreground: var(--muted);
+  --color-accent: var(--primary-soft);
+  --color-accent-foreground: var(--primary-hover);
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  --color-border: var(--border);
+  --color-input: var(--border);
+  --color-ring: var(--primary);
+
   --font-sans: var(--font-nunito);
   --font-display: var(--font-fredoka);
-  --radius-app: var(--radius);
+
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-lg: calc(var(--radius) - 2px);
+  --radius-xl: var(--radius);
 }
 
 html {
@@ -100,7 +127,7 @@ body {
   from { opacity: 0; transform: translateY(10px) scale(0.985); }
   to { opacity: 1; transform: none; }
 }
-.animate-in {
+.lynk-in {
   animation: lynk-fade-up 0.38s var(--ease-pop) both;
 }
 
