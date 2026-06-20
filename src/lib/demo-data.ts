@@ -424,6 +424,61 @@ export const DEMO_FEED: FeedItem[] = [
   },
 ];
 
+// Próximos eventos — para la sección de eventos del inicio.
+export type DemoEvent = {
+  id: string;
+  title: string;
+  date: string; // ej. "SÁB 14"
+  time: string;
+  location: string;
+  attendees: number;
+  communityName: string;
+  color: string;
+};
+
+export const DEMO_EVENTS: DemoEvent[] = [
+  {
+    id: "e1",
+    title: "Peulá de Yom Haatzmaut",
+    date: "SÁB 14",
+    time: "16:00",
+    location: "Snif Hanóar",
+    attendees: 24,
+    communityName: "Hanóar Hatzioní",
+    color: "#1d4ed8",
+  },
+  {
+    id: "e2",
+    title: "Inscripciones al Majané de Verano",
+    date: "DOM 15",
+    time: "11:00",
+    location: "CDI",
+    attendees: 60,
+    communityName: "Majané de Verano",
+    color: "#0d9488",
+  },
+  {
+    id: "e3",
+    title: "Voluntariado en el comedor",
+    date: "DOM 15",
+    time: "09:00",
+    location: "Comedor comunitario",
+    attendees: 18,
+    communityName: "Tikún Olam",
+    color: "#059669",
+  },
+  {
+    id: "e4",
+    title: "Torneo de fútbol Macabi",
+    date: "MIÉ 18",
+    time: "18:00",
+    location: "CDI",
+    attendees: 40,
+    communityName: "Macabi Hatzaír",
+    color: "#0ea5e9",
+  },
+];
+
 // Tus comunidades — fila de "historias" arriba del feed.
 export const DEMO_MY_COMMUNITIES = [
   { name: "Hanóar", slug: "hanoar-hatzioni", color: "#1d4ed8" },
